@@ -5,10 +5,11 @@
 # Customize your APP title, subtitle and menus here
 # ----------------------------------------------------------------------------------------------------------------------
 
-response.logo = A(B('web', SPAN(2), 'py'), XML('&trade;&nbsp;'),
-                  _class="navbar-brand", _href="http://www.web2py.com/",
-                  _id="web2py-logo")
-response.title = request.application.replace('_', ' ').title()
+# response.logo = A(B('web', SPAN(2), 'py'), XML('&trade;&nbsp;'),
+#                   _class="navbar-brand", _href="http://www.web2py.com/",
+#                   _id="web2py-logo")
+response.logo = A(IMG(_src=URL('static/images', 'logo.png'), _alt='MyFly'))
+response.title = 'MyFly'
 response.subtitle = ''
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -32,7 +33,12 @@ response.menu = [
     (T('Home'), False, URL('default', 'index'), [])
 ]
 
-DEVELOPMENT_MENU = True
+if auth.user:
+    response.menu += [
+        (T('Manage Flights'), False, URL('default', 'manage'), [])
+    ]
+
+DEVELOPMENT_MENU = False
 
 
 # ----------------------------------------------------------------------------------------------------------------------
