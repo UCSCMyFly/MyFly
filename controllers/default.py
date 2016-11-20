@@ -22,9 +22,17 @@ def index():
 
 @auth.requires_login()
 def manage():
-    return dict(message='manage',
-                some='banana')
-
+    return dict(
+    source={'SFO':'San Francisco',
+            'LAX':'Los Angeles'},
+    destination={'NAR':'Narita',
+                 'PAR':'Paris',
+                 'FCO':'Rome',
+                 'VCE':'Venice',
+                 'MAD':'Madrid',
+                 'PEK':'Beijing',
+                 'AMS':'Amsterdam'}
+    )
 
 def user():
     """
@@ -62,5 +70,3 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
-
-
