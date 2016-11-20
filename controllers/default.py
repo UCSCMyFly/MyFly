@@ -22,17 +22,15 @@ def index():
 
 @auth.requires_login()
 def manage():
-    return dict(
-    source={'SFO':'San Francisco',
-            'LAX':'Los Angeles'},
-    destination={'NAR':'Narita',
-                 'PAR':'Paris',
-                 'FCO':'Rome',
-                 'VCE':'Venice',
-                 'MAD':'Madrid',
-                 'PEK':'Beijing',
-                 'AMS':'Amsterdam'}
-    )
+    form1 = FORM(INPUT(_name='name', requires=IS_NOT_EMPTY()),
+               INPUT(_type='submit'))
+    form2 = FORM(INPUT(_name='name', requires=IS_NOT_EMPTY()),
+               INPUT(_type='submit'))
+    if form1.process(formname='form_one').accepted:
+        response.flash = 'form one accepted'
+    if form2.process(formname='form_two').accepted:
+        response.flash = 'form two accepted'
+    return dict(form1=form1, form2=form2)
 
 def user():
     """

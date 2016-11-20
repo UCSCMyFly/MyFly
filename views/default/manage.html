@@ -1,17 +1,5 @@
 {{extend 'layout.html'}}
-
-<h1>Place To Fly Out Of</h1>
-<select>
-  {{for key,value in source.iteritems():}}
-  <option value={{=key}}>{{=value}}</option>
-  {{pass}}
-</select>
-<button><p>Save</p></button>
-<h1>Places to Destination</h1>
-<select>
-  {{for key,value in destination.iteritems():}}
-  <option value={{=key}}>{{=value}}</option>
-  {{pass}}
-  <input placeholder="USD500.00"></input>
-  <button><p>Save</p></button>
-</select>
+<h1>Source</h1>
+{{=form1}}
+<h1>Destination</h1>
+{{=form2}}
