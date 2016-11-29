@@ -7,5 +7,5 @@ uploads/*
 *~
 .sass-cache
 .sass-cache/*
-.idea/workspace.xml
+.idea/
 *.DS_Store
