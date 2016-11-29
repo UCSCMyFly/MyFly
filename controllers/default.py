@@ -29,24 +29,25 @@ def manage():
                INPUT(_type='submit'))
     form2 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
                INPUT(_type='submit'))
-    # form1 = SQLFORM(db.source_ap)
-    # form2 = SQLFORM(db.destination_ap)
-    if form1.process(formname='form_one').accepted:
-        unode = db.user_nodes(user_email = auth.user.email)
-        logger.info('%r', unode)
-        # unode = unode.first() if unode else None
-        if unode is None:
-            node_id = db.user_nodes.insert(user_email=auth.user.email)
-            unode = db.user_nodes(id=node_id)
+    unode = db.user_nodes(user_email = auth.user.email)
+    if unode is None:
+        node_id = db.user_nodes.insert(user_email=auth.user.email)
+        unode = db.user_nodes(id=node_id)
 
-        logger.info('%r', unode.sources)
-        unode.sources.append(request.vars.name)
-        unode.update(sources=unode.sources)
-        logger.info('%r', unode)
-        logger.info('%r', request.vars.name)
+    if form1.process(formname='form_one').accepted:
+        sources = unode.sources
+        if request.vars.name not in sources:
+            sources.append(request.vars.name)
+            db(db.user_nodes.user_email==auth.user.email).update(sources=sources)
         response.flash = 'form one accepted ' + request.vars.name
+
     if form2.process(formname='form_two').accepted:
+        destinations = unode.destinations
+        if request.vars.name not in destinations:
+            destinations.append(request.vars.name)
+            db(db.user_nodes.user_email==auth.user.email).update(destinations=destinations)
         response.flash = 'form two accepted'
+    
     return dict(form1=form1, form2=form2)
 
 def user():
