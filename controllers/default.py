@@ -26,11 +26,12 @@ def index():
 
     if auth.user:
         unode = db.user_nodes(user_email = auth.user.email)
-        pairs = make_pairs(unode.sources, unode.destinations)
-        travel_date = date.today() + timedelta(days=30)
-        for pair in pairs:
-            # logger.info('%r', pair[0])
-            get_flights(travel_date, pair)
+        if unode != None:
+            pairs = make_pairs(unode.sources, unode.destinations)
+            travel_date = date.today() + timedelta(days=30)
+            for pair in pairs:
+                # logger.info('%r', pair[0])
+                get_flights(travel_date, pair)
 
     return dict(message='index',
                 some='banana')
