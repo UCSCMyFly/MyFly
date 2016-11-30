@@ -20,8 +20,8 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    return dict(message='index',
-                some='banana')
+    return dict(message='',
+                some='')
 
 @auth.requires_login()
 def manage():
