@@ -11,6 +11,7 @@ db.define_table('user_nodes',
 				Field('user_email' ,default=auth.user.email if auth.user_id else None),
 				Field('sources', 'list:string', default=[]),
 				Field('destinations', 'list:string', default=[]),
+				Field('dest_prices', 'list:integer', default=[]),
 				)
 
 db.define_table('airports',

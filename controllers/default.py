@@ -8,9 +8,9 @@
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
 
-import requests
+import requests, json
 from datetime import date, datetime, timedelta
-
+    
 import logging
 logger = logging.getLogger("web2py.app.myfly")
 logger.setLevel(logging.DEBUG)
@@ -27,85 +27,66 @@ def index():
     if auth.user:
         unode = db.user_nodes(user_email = auth.user.email)
         if unode != None:
-            pairs = make_pairs(unode.sources, unode.destinations)
-            travel_date = date.today() + timedelta(days=30)
-            for pair in pairs:
-                # logger.info('%r', pair[0])
-                get_flights(travel_date, pair)
+            sets = make_flight_sets(unode)
+            travel_date = (date.today() + timedelta(days=30)).isoformat()
+            for flight_set in sets:
+                logger.info('%r', 'USD ' + str(flight_set[2]))
+                get_flights(travel_date, flight_set)
 
     return dict(message='index',
                 some='banana')
 
-def get_flights(date, pair):
-
-    url = 'https://www.googleapis.com/qpxExpress/v1/trips/search'
-    request = {
+def get_flights(date, flight_set):
+    api_key = "AIzaSyAYyM6_C60GEHV5MnCcTCVhPpr9LTlwPE0"
+    url = 'https://www.googleapis.com/qpxExpress/v1/trips/search?key=' + api_key
+    headers = {'content-type': 'application/json'}
+    data = {
         "request": {
-        "maxPrice": "USD 1500",
+        "maxPrice": 'USD' + str(flight_set[2]),
         "passengers": {
           "adultCount": 1,
-          "childCount": 0,
-          "infantInLapCount": 0,
-          "infantInSeatCount": 0,
-          "kind": "qpxexpress#passengerCounts",
-          "seniorCount": 0
         },
-        "refundable": False,
-        "saleCountry": "US",
         "slice": [
           {
-            "alliance": "",
             "date": date,
-            "destination": pair[1],
-            "kind": "qpxexpress#sliceInput",
-            "maxConnectionDuration": 150,
-            "maxStops": 2,
-            "origin": pair[0],
-            "permittedCarrier": [
-              "AA",
-              "AS",
-              "RC",
-              "MX",
-              "NW",
-              "UA",
-              "NH",
-              "CA",
-              "BA",
-              "OS",
-              "FB",
-              "CI"
-            ],
-            "permittedDepartureTime": {
-              "earliestTime": "00:00",
-              "kind": "qpxexpress#timeOfDayRange",
-              "latestTime": "23:59"
-            },
-            "preferredCabin": "COACH",
-            "prohibitedCarrier": []
+            "destination": flight_set[1],
+            "origin": flight_set[0],
             }
         ],
-        "solutions": 10,
-        "ticketingCountry": "US"
+        "solutions": 100,
         }
     }
-    r = requests.get(url, data=request)
-    logger.info('%r', r)
+    response = requests.post(url, data=json.dumps(data), headers=headers)
+    results = response.json()
+
+    logger.info('%r to %r', flight_set[0], flight_set[1])
+    flight_path = results['trips']
+    for num in xrange(0,1):
+        logger.info('%r', flight_path['tripOption'][num]['saleTotal'])
+        logger.info('%r', flight_path['data']['city'][0]['name'])
+        logger.info('%r', flight_path['data']['city'][1]['name'])
+        logger.info('%r', flight_path['data']['carrier'][0]['name'])
 
 
-def make_pairs(sources, destinations):
+def make_flight_sets(unode):
     pairs = []
+    sources = unode.sources
+    destinations = unode.destinations
+    prices = unode.dest_prices
     for source in sources:
-        for dest in destinations:
-            if source != dest:
-                pairs.append([source, dest])
+        for i  in xrange(0, len(destinations)):
+        # for dest, price in destinations, prices:
+            if source != destinations[i]:
+                pairs.append([source, destinations[i], prices[i]])
     return pairs
 
 @auth.requires_login()
 def manage():
     form1 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
-               INPUT(_type='submit'))
+                 INPUT(_type='submit'))
     form2 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
-               INPUT(_type='submit'))
+                 INPUT(_name='price', requires=IS_INT_IN_RANGE(1, 100000, error_message='price cant be negative')),
+                 INPUT(_type='submit'))
     unode = db.user_nodes(user_email = auth.user.email)
     if unode is None:
         node_id = db.user_nodes.insert(user_email=auth.user.email)
@@ -119,10 +100,13 @@ def manage():
             response.flash = 'form one accepted ' + request.vars.name
 
     if form2.process(formname='form_two').accepted:
+        logger.info('%r', unode)
         destinations = unode.destinations
+        prices = unode.dest_prices
         if request.vars.name not in destinations:
             destinations.append(request.vars.name)
-            db(db.user_nodes.user_email==auth.user.email).update(destinations=destinations)
+            prices.append(int(request.vars.price))
+            db(db.user_nodes.user_email==auth.user.email).update(destinations=destinations, dest_prices=prices)
             response.flash = 'form two accepted'
     
     return dict(form1=form1, form2=form2)
