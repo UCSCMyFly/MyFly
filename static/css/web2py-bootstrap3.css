@@ -25,8 +25,14 @@ div.w2p_flash.alert:hover {
     filter: alpha(opacity=25);
 }
 .main-container {
-    margin-top: 20px;
+    margin-top: 0px;
 }
+
+<body>
+<img src="india.png" alt="Mountain View" style="width:304px;height:228px;">
+
+</body>
+</html>
 
 div.error {
     width: auto;
@@ -61,6 +67,14 @@ ul.w2p_list {
     display: inline-block;
     width: 85%;
     margin-right: 4px;
+}
+
+#main {
+background: url(../images/background-main.png) no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
 }
 .w2p_list li a {
     margin-bottom: 2px;
