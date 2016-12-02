@@ -112,7 +112,7 @@ def manage():
     form1 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
                  INPUT(_type='submit'))
     form2 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
-                 INPUT(_name='price', requires=IS_INT_IN_RANGE(1, 100000, error_message='price cant be negative')),
+                 INPUT(_name='price', requires=IS_FLOAT_IN_RANGE(1, 10000000, dot=".", error_message='price cant be negative')),
                  INPUT(_type='submit'))
     unode = db.user_nodes(user_email = auth.user.email)
     if unode is None:
@@ -132,7 +132,7 @@ def manage():
         prices = unode.dest_prices
         if request.vars.name not in destinations:
             destinations.append(request.vars.name)
-            prices.append(int(request.vars.price))
+            prices.append(int(float(request.vars.price)))
             db(db.user_nodes.user_email==auth.user.email).update(destinations=destinations, dest_prices=prices)
             response.flash = 'form two accepted'
 
