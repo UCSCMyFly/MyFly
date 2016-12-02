@@ -8,7 +8,7 @@
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
 
-import requests
+#import request
 from datetime import date, datetime, timedelta
 
 import logging
@@ -24,6 +24,7 @@ def index():
     return auth.wiki()
     """
 
+
     if auth.user:
         unode = db.user_nodes(user_email = auth.user.email)
         if unode != None:
@@ -33,8 +34,8 @@ def index():
                 # logger.info('%r', pair[0])
                 get_flights(travel_date, pair)
 
-    return dict(message='index',
-                some='banana')
+    return dict(message='',
+                some='')
 
 def get_flights(date, pair):
 
