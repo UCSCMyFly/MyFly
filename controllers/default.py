@@ -12,7 +12,7 @@
 #import request
 import requests, json
 from datetime import date, datetime, timedelta
-    
+
 import logging
 logger = logging.getLogger("web2py.app.myfly")
 logger.setLevel(logging.DEBUG)
@@ -54,9 +54,10 @@ def get_flights(date, flight_set):
             "date": date,
             "destination": flight_set[1],
             "origin": flight_set[0],
+            "maxStops": 0,
             }
         ],
-        "solutions": 100,
+        "solutions": 3,
         }
     }
     response = requests.post(url, data=json.dumps(data), headers=headers)
@@ -112,7 +113,7 @@ def manage():
             prices.append(int(request.vars.price))
             db(db.user_nodes.user_email==auth.user.email).update(destinations=destinations, dest_prices=prices)
             response.flash = 'form two accepted'
-    
+
     return dict(form1=form1, form2=form2)
 
 def user():
