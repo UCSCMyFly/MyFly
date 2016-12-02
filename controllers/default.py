@@ -61,14 +61,15 @@ def get_flights(date, flight_set):
     }
     response = requests.post(url, data=json.dumps(data), headers=headers)
     results = response.json()
+    logger.info('%r', request)
 
-    logger.info('%r to %r', flight_set[0], flight_set[1])
+    # logger.info('%r to %r', flight_set[0], flight_set[1])
     flight_path = results['trips']
-    for num in xrange(0,1):
-        logger.info('%r', flight_path['tripOption'][num]['saleTotal'])
-        logger.info('%r', flight_path['data']['city'][0]['name'])
-        logger.info('%r', flight_path['data']['city'][1]['name'])
-        logger.info('%r', flight_path['data']['carrier'][0]['name'])
+    # for num in xrange(0,1):
+    #     logger.info('%r', flight_path['tripOption'][num]['saleTotal'])
+    #     logger.info('%r', flight_path['data']['city'][0]['name'])
+    #     logger.info('%r', flight_path['data']['city'][1]['name'])
+    #     logger.info('%r', flight_path['data']['carrier'][0]['name'])
 
 
 def make_flight_sets(unode):
