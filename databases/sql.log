@@ -67,3 +67,6 @@ CREATE TABLE airports(
     airport_name CHAR(512)
 );
 success!
+timestamp: 2016-12-02T13:28:06.669000
+ALTER TABLE user_nodes ADD dest_prices TEXT;
+success!
