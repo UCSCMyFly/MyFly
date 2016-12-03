@@ -62,7 +62,7 @@ def get_flights(date, flight_set):
     }
     response = requests.post(url, data=json.dumps(data), headers=headers)
     results = response.json()
-    logger.info('%r', request)
+    logger.info('%r', results)
 
     # logger.info('%r to %r', flight_set[0], flight_set[1])
     flight_path = results['trips']

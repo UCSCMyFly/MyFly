@@ -97,7 +97,7 @@ select.autocomplete {
     -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     border-color: #428bca;
-    padding: 6px 12px;
+    padding: 12px 12px;
 }
 #web2py-logo {
     color: #c6cecc;
@@ -116,15 +116,15 @@ select.autocomplete {
 .footer > .container-fluid {
     padding-left: 15px;
     padding-right: 15px;
-    margin: 20px;
+    margin: 10px;
 }
 .background {
     background: url(../images/background.jpg) no-repeat center center;
     padding-bottom: 100px;
 }
 body {
-    padding-top: 60px;
-    margin-bottom: 60px;
+    padding-top: 70px;
+    margin-bottom: 70px;
 }
 header {
     -webkit-box-shadow: 0 0 8px 2px #000;
