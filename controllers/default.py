@@ -21,23 +21,20 @@ def index():
     """
     example action using the internationalization operator T and flash
     rendered by views/default/index.html or views/generic.html
-
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
 
+
+    flights = []
 
     if auth.user:
         unode = db.user_nodes(user_email = auth.user.email)
         if unode != None:
             sets = make_flight_sets(unode)
             travel_date = (date.today() + timedelta(days=30)).isoformat()
-            for flight_set in sets:
-                logger.info('%r', 'USD ' + str(flight_set[2]))
-                get_flights(travel_date, flight_set)
-
-    return dict(message='',
-                some='')
+            # for flight_set in sets:
+    return dict(flights=flights)
 
 def get_flights(date, flight_set):
     api_key = "AIzaSyAYyM6_C60GEHV5MnCcTCVhPpr9LTlwPE0"
@@ -54,7 +51,7 @@ def get_flights(date, flight_set):
             "date": date,
             "destination": flight_set[1],
             "origin": flight_set[0],
-            "maxStops": 0,
+            "maxStops": 1,
             }
         ],
         "solutions": 3,
@@ -62,16 +59,38 @@ def get_flights(date, flight_set):
     }
     response = requests.post(url, data=json.dumps(data), headers=headers)
     results = response.json()
-    logger.info('%r', results)
+    ##logger.info('%r', results)
 
-    # logger.info('%r to %r', flight_set[0], flight_set[1])
-    flight_path = results['trips']
-    # for num in xrange(0,1):
-    #     logger.info('%r', flight_path['tripOption'][num]['saleTotal'])
-    #     logger.info('%r', flight_path['data']['city'][0]['name'])
-    #     logger.info('%r', flight_path['data']['city'][1]['name'])
-    #     logger.info('%r', flight_path['data']['carrier'][0]['name'])
+    from_code = flight_set[0]
+    dest_code = flight_set[1]
+    travel_date = date
+    source_name = ''
+    source_airline = ''
+    destination_name = ''
+    price_of_flight = ''
+    time_of_flight = ''
 
+    list_of_flights = []
+
+    # Get the airline first
+    for city in results['trips']['data']['airport']:
+        if city['code'] == from_code:
+            source_name = city['name']
+        if city['code'] == dest_code:
+            destination_name = city['name']
+
+    for solution in results['trips']['tripOption']:
+        price_of_flight = solution['saleTotal']
+        time_of_flight = solution['slice'][0]['segment'][0]['leg'][0]['departureTime']
+        airline_code = solution['slice'][0]['segment'][0]['flight']['carrier']
+        for airline in results['trips']['data']['carrier']:
+            if airline_code == airline['code']:
+                source_airline = airline['name']
+        ##logger.info('\nFROM_CODE: %r\nDEST_CODE: %r\nTRAVEL_DATE: %r\nSOURCE_NAME: %r\nDEST_NAME: %r\nPRICE: %r\nTIME: %r\nSOURCE_AIRLINE: %r', from_code, dest_code, travel_date,source_name, destination_name, price_of_flight, time_of_flight, source_airline)
+        flight_into_list = {'from':from_code,'to':dest_code,'date':travel_date,'source_name': source_name,'dest_name': destination_name,'price': price_of_flight,'time': time_of_flight,'airline': source_airline}
+        list_of_flights.append(flight_into_list)
+    logger.info('%r', list_of_flights)
+    return list_of_flights
 
 def make_flight_sets(unode):
     pairs = []
@@ -90,7 +109,7 @@ def manage():
     form1 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
                  INPUT(_type='submit'))
     form2 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
-                 INPUT(_name='price', requires=IS_INT_IN_RANGE(1, 100000, error_message='price cant be negative')),
+                 INPUT(_name='price', requires=IS_FLOAT_IN_RANGE(1, 10000000, dot=".", error_message='price cant be negative')),
                  INPUT(_type='submit'))
     unode = db.user_nodes(user_email = auth.user.email)
     if unode is None:
@@ -110,7 +129,7 @@ def manage():
         prices = unode.dest_prices
         if request.vars.name not in destinations:
             destinations.append(request.vars.name)
-            prices.append(int(request.vars.price))
+            prices.append(int(float(request.vars.price)))
             db(db.user_nodes.user_email==auth.user.email).update(destinations=destinations, dest_prices=prices)
             response.flash = 'form two accepted'
 
