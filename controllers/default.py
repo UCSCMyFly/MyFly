@@ -27,17 +27,15 @@ def index():
     """
 
 
+    flights = []
+
     if auth.user:
         unode = db.user_nodes(user_email = auth.user.email)
         if unode != None:
             sets = make_flight_sets(unode)
             travel_date = (date.today() + timedelta(days=30)).isoformat()
-            for flight_set in sets:
-                logger.info('%r', 'USD ' + str(flight_set[2]))
-                get_flights(travel_date, flight_set)
-
-    return dict(message='',
-                some='')
+            # for flight_set in sets:
+    return dict(flights=flights)
 
 def get_flights(date, flight_set):
     api_key = "AIzaSyAYyM6_C60GEHV5MnCcTCVhPpr9LTlwPE0"
