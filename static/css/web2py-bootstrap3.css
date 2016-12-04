@@ -72,6 +72,21 @@ background: url(../images/background-main.png) no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+#main2 {
+background: url(../images/background-main2.png) no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
+#main3 {
+background: url(../images/background-main3.png) no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+padding-bottom:0px;
+}
 .w2p_list li a {
     margin-bottom: 2px;
 }
