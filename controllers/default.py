@@ -19,10 +19,14 @@ logger.setLevel(logging.DEBUG)
 
 def index():
     flights = []
+    has_airport = False
     unode = db.user_nodes(user_email = auth.user.email) if auth.user else None
-    if unode != None:
+    if unode:
+        has_airport = True
         add_flights(unode, flights)    
-    return dict(flights=flights)
+    return dict(flights=flights,
+                has_airport=has_airport,
+                )
 
 def add_flights(unode, list):
     sets = make_flight_sets(unode)
