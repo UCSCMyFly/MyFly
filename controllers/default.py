@@ -47,6 +47,10 @@ def add_flightset(flight_set, flights):
                 flights.append(flight)
     else:
         solutions = get_flights(travel_date, flight_set)
+        db.local_flights.insert(from_code=flight_set['from'],
+            to_code=flight_set['to'],
+            price='USD1000000000',
+            travel_date=str_date)
         add_api_flights(solutions, flights)
 
 
@@ -87,8 +91,8 @@ def get_flights(date, flight_set):
     response = requests.post(url, data=json.dumps(data), headers=headers)
     results = response.json()
     if 'error' in results or 'tripOption' not in results['trips']:
-        logger.info('%r\n\n', results)
         logger.info('%r to %r failed', flight_set['from'], flight_set['to'])
+        logger.info('%r', results)
         return []
 
     from_code = flight_set['from']
