@@ -14,6 +14,17 @@ db.define_table('user_nodes',
 				Field('dest_prices', 'list:integer', default=[]),
 				)
 
+db.define_table('local_flights',
+				Field('from_code', 'string'),
+				Field('to_code', 'string'),
+				Field('travel_date', 'string'),
+				Field('source_name', 'string'),
+				Field('dest_name', 'string'),
+				Field('price', 'string'),
+				Field('airline', 'string'),
+				Field('flight_time', 'string'),
+				)
+
 db.define_table('airports',
 				Field('airport_name', 'string'),
 				)

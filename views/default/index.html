@@ -14,6 +14,18 @@
               </div>
           </div>
       </section>
+      {{for flight in flights:}}
+      <div>
+        {{=flight['from_code']}}
+        {{=flight['to_code']}} 
+        {{=flight['travel_date']}} 
+        {{=flight['source_name']}} 
+        {{=flight['dest_name']}} 
+        {{=flight['price']}} 
+        {{=flight['airline']}} 
+        {{=flight['flight_time']}} 
+      </div>
+      {{pass}}
 
 {{else:}}
 

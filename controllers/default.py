@@ -18,23 +18,46 @@ logger = logging.getLogger("web2py.app.myfly")
 logger.setLevel(logging.DEBUG)
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
-
-
     flights = []
-
-    if auth.user:
-        unode = db.user_nodes(user_email = auth.user.email)
-        if unode != None:
-            sets = make_flight_sets(unode)
-            travel_date = (date.today() + timedelta(days=30)).isoformat()
-            # for flight_set in sets:
+    unode = db.user_nodes(user_email = auth.user.email) if auth.user else None
+    if unode != None:
+        add_flights(unode, flights)    
     return dict(flights=flights)
+
+def add_flights(unode, list):
+    sets = make_flight_sets(unode)
+    for flight_set in sets:
+        add_flightset(flight_set, list)
+
+def add_flightset(flight_set, flights):
+    travel_date = (date.today() + timedelta(days=30)).isoformat()
+    str_date = str(travel_date)
+    q = (db.local_flights.from_code==flight_set['from'])
+    q &= (db.local_flights.to_code==flight_set['to'])
+    q &= (db.local_flights.travel_date==str_date)
+    local_flights = db(q).select()
+    if local_flights:
+        for flight in local_flights:
+            price = int(float(flight['price'][3:]))
+            if price <= flight_set['max_price']:
+                flights.append(flight)
+    else:
+        solutions = get_flights(travel_date, flight_set)
+        add_api_flights(solutions, flights)
+
+
+def add_api_flights(solutions, flights):
+    for solu in solutions:
+        flight_id = db.local_flights.insert(from_code=solu['from'],
+            to_code=solu['to'],
+            travel_date=solu['date'],
+            source_name=solu['source_name'],
+            dest_name=solu['dest_name'],
+            price=solu['price'],
+            flight_time=solu['time'],
+            airline=solu['airline'])
+        flight = db.local_flights(id=flight_id)
+        flights.append(flight)
 
 def get_flights(date, flight_set):
     api_key = "AIzaSyAYyM6_C60GEHV5MnCcTCVhPpr9LTlwPE0"
@@ -42,16 +65,16 @@ def get_flights(date, flight_set):
     headers = {'content-type': 'application/json'}
     data = {
         "request": {
-        "maxPrice": 'USD' + str(flight_set[2]),
+        "maxPrice": 'USD' + str(flight_set['max_price']),
         "passengers": {
           "adultCount": 1,
         },
         "slice": [
           {
             "date": date,
-            "destination": flight_set[1],
-            "origin": flight_set[0],
-            "maxStops": 1,
+            "destination": flight_set['to'],
+            "origin": flight_set['from'],
+            "maxStops": 2,
             }
         ],
         "solutions": 3,
@@ -59,10 +82,16 @@ def get_flights(date, flight_set):
     }
     response = requests.post(url, data=json.dumps(data), headers=headers)
     results = response.json()
+
     #logger.info('%r', results)
 
-    from_code = flight_set[0]
-    dest_code = flight_set[1]
+    if 'error' in results or 'tripOption' not in results['trips']:
+        logger.info('%r\n\n', results)
+        logger.info('%r to %r failed', flight_set['from'], flight_set['to'])
+        return []
+
+    from_code = flight_set['from']
+    dest_code = flight_set['to']
     travel_date = date
     source_name = ''
     source_airline = ''
@@ -81,19 +110,25 @@ def get_flights(date, flight_set):
 
     for solution in results['trips']['tripOption']:
         price_of_flight = solution['saleTotal']
-        time_of_flight = solution['slice'][0]['segment'][0]['leg'][0]['departureTime']
+        time_of_flight = solution['slice'][0]['segment'][0]['leg'][0]['departureTime'][11:-6]
         airline_code = solution['slice'][0]['segment'][0]['flight']['carrier']
         for airline in results['trips']['data']['carrier']:
             if airline_code == airline['code']:
                 source_airline = airline['name']
-        ##logger.info('\nFROM_CODE: %r\nDEST_CODE: %r\nTRAVEL_DATE: %r\nSOURCE_NAME: %r\nDEST_NAME: %r\nPRICE: %r\nTIME: %r\nSOURCE_AIRLINE: %r', from_code, dest_code, travel_date,source_name, destination_name, price_of_flight, time_of_flight, source_airline)
-        flight_into_list = {'from':from_code,'to':dest_code,'date':travel_date,'source_name': source_name,'dest_name': destination_name,'price': price_of_flight,'time': time_of_flight,'airline': source_airline}
+        flight_into_list = {'from':from_code,
+            'to':dest_code,
+            'date':travel_date,
+            'source_name': source_name,
+            'dest_name': destination_name,
+            'price': price_of_flight,
+            'time': time_of_flight,
+            'airline': source_airline
+            }
         list_of_flights.append(flight_into_list)
-    logger.info('%r', list_of_flights)
     return list_of_flights
 
 def make_flight_sets(unode):
-    pairs = []
+    flight_sets = []
     sources = unode.sources
     destinations = unode.destinations
     prices = unode.dest_prices
@@ -101,8 +136,9 @@ def make_flight_sets(unode):
         for i  in xrange(0, len(destinations)):
         # for dest, price in destinations, prices:
             if source != destinations[i]:
-                pairs.append([source, destinations[i], prices[i]])
-    return pairs
+                obj = {'from':source, 'to':destinations[i], 'max_price':prices[i]}
+                flight_sets.append(obj)
+    return flight_sets
 
 @auth.requires_login()
 def manage():
@@ -124,7 +160,6 @@ def manage():
             response.flash = 'form one accepted ' + request.vars.name
 
     if form2.process(formname='form_two').accepted:
-        logger.info('%r', unode)
         destinations = unode.destinations
         prices = unode.dest_prices
         if request.vars.name not in destinations:
