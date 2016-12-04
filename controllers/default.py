@@ -59,7 +59,7 @@ def get_flights(date, flight_set):
     }
     response = requests.post(url, data=json.dumps(data), headers=headers)
     results = response.json()
-    ##logger.info('%r', results)
+    #logger.info('%r', results)
 
     from_code = flight_set[0]
     dest_code = flight_set[1]
