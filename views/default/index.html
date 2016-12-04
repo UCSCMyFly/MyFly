@@ -10,10 +10,10 @@
                       <hr class="light">
                   </div>
               </div>
-              <div class="row">
-              </div>
+              <div class="row"></div>
           </div>
       </section>
+
       {{for flight in flights:}}
       <div>
         {{=flight['from_code']}}
@@ -24,7 +24,47 @@
         {{=flight['price']}} 
         {{=flight['airline']}} 
         {{=flight['flight_time']}}
-          </div>
+      </div>
+
+<!--
+<table>
+  <tr>
+    <th scope="col">Source</th>
+    <th scope="col">Destination</th>
+    <th scope="col">Price</th>
+    <th scope="col">Price</th>
+    <th scope="col">Airplane</th>
+    <th scope="col">Flight Duration</th>
+    <th>Source</th>
+  </tr>
+  <tr>
+
+ <!--    <table style="width: 100%">
+     <thead>
+          <tr>
+               <th>Source</th>
+               <th>Destination</th>
+               <th>Travel Date</th>
+               <th>Price</th>
+              <th>Airline</th>
+              <th>Flight Duration</th>
+           </tr>
+     </thead>
+     <tbody id="tbody">
+     </tbody>
+</table>
+
+$.each(data, function (index, item) {
+     var eachrow = "<tr>"
+                 + "<td>" + item[1] + "</td>"
+                 + "<td>" + item[2] + "</td>"
+                 + "<td>" + item[3] + "</td>"
+                 + "<td>" + item[4] + "</td>"
+                 + "<td>" + item[5] + "</td>"
+                 + "<td>" + item[6] + "</td>"
+                 + "</tr>";
+     $('#tbody').append(eachrow);
+});-->
       {{pass}}
 
 {{else:}}
@@ -55,7 +95,8 @@
           <div class="container">
               <div class="row">
                   <div class="col-lg-8 col-lg-offset-2 text-center">
-                      <h2 class="section-heading" id="heading">"The world is a book and those who do not travel only read a page. -Saint Augustine </h2>
+                      <h2 class="section-heading" id="heading">"The world is a book and those who do not travel only read a page."</h2>
+                                                               <h2>-Saint Augustine</h2>
                       <hr class="light">
                   </div>
               </div>
@@ -121,7 +162,25 @@
           <div class="container-fluid">
               <div class="row">
                   <div class="col-lg-8 col-lg-offset-2">
+                    <h2 class="section-heading" id="heading3">Check out our flights to Venice!</h2>
+                  </div>
+                  <div class="col-lg-8 col-lg-offset-2 text-center">
+                      <h2 class="section-heading"></h2>
+                      <hr class="light">
+                      <p class="text-faded"></p>
+                  </div>
+              </div>
+              <div class="row">
 
+              </div>
+          </div>
+      </section>
+
+          <section class="bg-fourth" id="main4">
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-lg-8 col-lg-offset-2">
+                    <h2 class="section-heading" id="heading3">Explore the Wonders of Perito Moreno Glacier in Argentina!</h2>
                   </div>
                   <div class="col-lg-8 col-lg-offset-2 text-center">
                       <h2 class="section-heading"></h2>

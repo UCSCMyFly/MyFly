@@ -10,14 +10,27 @@ html {
     letter-spacing:inherit;
     line-height:0.143;
 }
+/*th {
+  font-weight: bold;
+  text-align:left;
+}*/
+.row2 {
+    border:1px solid black;
+}}
 #heading{
     font-size:30px;
     padding-top:10px;
-    color:white;
+    color:black;
 }
 #heading2{
     font-size:45px;
     color:white;
+    text-align:center;
+}
+#heading3{
+    font-size:45px;
+    color:black;
+    text-align:center;
 }
 #section-heading{
     font-size:45px;
