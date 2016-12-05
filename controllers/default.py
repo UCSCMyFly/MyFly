@@ -68,7 +68,8 @@ def add_api_flights(solutions, flights):
         flights.append(flight)
 
 def get_flights(date, flight_set):
-    api_key = "AIzaSyAYyM6_C60GEHV5MnCcTCVhPpr9LTlwPE0"
+    api_key = "AIzaSyAAGdhwNBSeJLOsMUfwhP7SQ5PHJ_9kHEc"
+
     url = 'https://www.googleapis.com/qpxExpress/v1/trips/search?key=' + api_key
     headers = {'content-type': 'application/json'}
     data = {
