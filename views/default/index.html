@@ -12,7 +12,19 @@
               </div>
               <div class="row"></div>
           </div>
-      </section>
+</section>
+
+<table>
+  <tr>
+    <th scope="col" >Source</th>
+    <th scope="col">Destination</th>
+    <th scope="col">Travel Date</th>
+    <th scope="col">Source Name</th>
+    <th scope="col">Destination Name</th>
+    <th scope="col">Price</th>
+    <th scope="col">Airline</th>
+      <th scope="col">Flight Duration</th>
+  </tr>
 
       {{if has_airport and len(flights) == 0:}}
         no flights are available
@@ -21,33 +33,19 @@
       {{pass}}
 
       {{for flight in flights:}}
-      <div>
-        {{=flight['from_code']}}
-        {{=flight['to_code']}} 
-        {{=flight['travel_date']}} 
-        {{=flight['source_name']}} 
-        {{=flight['dest_name']}} 
-        {{=flight['price']}} 
-        {{=flight['airline']}} 
-        {{=flight['flight_time']}}
-      </div>
+      <tr>
+        <td class="column2">{{=flight['from_code']}}</td>
+        <td class="column">{{=flight['to_code']}}</td>
+        <td class="column">{{=flight['travel_date']}}</td>
+        <td class="column">{{=flight['source_name']}}</td>
+        <td class="column">{{=flight['dest_name']}}</td>
+        <td class="column">{{=flight['price']}}</td>
+        <td class="column">{{=flight['airline']}}</td>
+        <td class="column">{{=flight['flight_time']}}</td>
+      </tr>
 
-
-<table>
-  <tr>
-    <th scope="col">Source</th>
-    <th scope="col">Destination</th>
-    <th scope="col">Travel Date</th>
-    <th scope="col">Price</th>
-    <th scope="col">Airline</th>
-    <th scope="col">Flight Duration</th>
-    <th>Source</th>
-  </tr>
-
-<div id="content" class="col-sm-10 col-sm-offset-1"><div class="text-center">
-    <table id="table" class="" role="grid">
-
-      {{pass}}
+{{pass}}
+</table>
 
 {{else:}}
 

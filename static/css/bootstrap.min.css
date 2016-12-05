@@ -1061,11 +1061,16 @@ html {
 }
 body {
 	font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-size:30px;
-	line-height:1.143;
+	font-size:20px;
+	line-height:1.43;
 	color:#3e3f3a;
 	background-color:#ffffff
 }
+
+.column {
+    width: 200px;
+}
+
 input,button,select,textarea {
 	font-family:inherit;
 	font-size:inherit;
