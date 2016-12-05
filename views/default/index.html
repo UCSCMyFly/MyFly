@@ -19,34 +19,39 @@
 {{elif not has_airport:}}
   go set up initial airports
 {{else:}}
-<table>
-  <tr>
-    <th scope="col" >Source</th>
-    <th scope="col">Destination</th>
-    <th scope="col">Travel Date</th>
-    <th scope="col">Source Name</th>
-    <th scope="col">Destination Name</th>
-    <th scope="col">Price</th>
-    <th scope="col">Airline</th>
-      <th scope="col">Flight Duration</th>
-  </tr>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Travel Date</th>
+            <th>Source Name</th>
+            <th>Destination Name</th>
+            <th>Price</th>
+            <th>Airline</th>
+            <th>Flight Duration</th>
+        </tr>
+    </thead>
 
 
-      {{for flight in flights:}}
-      <tr>
-        <td class="column2">{{=flight['from_code']}}</td>
-        <td class="column">{{=flight['to_code']}}</td>
-        <td class="column">{{=flight['travel_date']}}</td>
-        <td class="column">{{=flight['source_name']}}</td>
-        <td class="column">{{=flight['dest_name']}}</td>
-        <td class="column">{{=flight['price']}}</td>
-        <td class="column">{{=flight['airline']}}</td>
-        <td class="column">{{=flight['flight_time']}}</td>
-      </tr>
-
+    {{if has_airport and len(flights) == 0:}} no flights are available {{elif not has_airport:}} go set up initial airports {{pass}} {{for flight in flights:}}
+    <tbody>
+        <tr>
+            <td>{{=flight['from_code']}}</td>
+            <td>{{=flight['to_code']}}</td>
+            <td>{{=flight['travel_date']}}</td>
+            <td>{{=flight['source_name']}}</td>
+            <td>{{=flight['dest_name']}}</td>
+            <td>{{=flight['price']}}</td>
+            <td>{{=flight['airline']}}</td>
+            <td>{{=flight['flight_time']}}</td>
+        </tr>
+    </tbody>
 {{pass}}
 </table>
 {{pass}}
+
+
 
 {{else:}}
 
@@ -322,4 +327,3 @@
     </section>
 -->
 {{pass}}
-
