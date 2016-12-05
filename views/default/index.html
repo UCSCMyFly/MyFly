@@ -14,6 +14,11 @@
           </div>
 </section>
 
+{{if has_airport and len(flights) == 0:}}
+  no flights are available
+{{elif not has_airport:}}
+  go set up initial airports
+{{else:}}
 <table>
   <tr>
     <th scope="col" >Source</th>
@@ -26,11 +31,6 @@
       <th scope="col">Flight Duration</th>
   </tr>
 
-      {{if has_airport and len(flights) == 0:}}
-        no flights are available
-      {{elif not has_airport:}}
-        go set up initial airports
-      {{pass}}
 
       {{for flight in flights:}}
       <tr>
@@ -46,6 +46,7 @@
 
 {{pass}}
 </table>
+{{pass}}
 
 {{else:}}
 
