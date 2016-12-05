@@ -14,6 +14,12 @@
           </div>
       </section>
 
+      {{if has_airport and len(flights) == 0:}}
+        no flights are available
+      {{elif not has_airport:}}
+        go set up initial airports
+      {{pass}}
+
       {{for flight in flights:}}
       <div>
         {{=flight['from_code']}}
