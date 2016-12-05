@@ -95,6 +95,22 @@ background: url(../images/background-main4.png) no-repeat center center fixed;
 background-size: cover;
 padding-bottom:0px;
 }
+#main5 {
+background: url(../images/background-main5.png) no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+padding-bottom:0px;
+}
+#main7 {
+background: url(../images/background-main7.png) no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+padding-bottom:0px;
+}
 .w2p_list li a {
     margin-bottom: 2px;
 }
