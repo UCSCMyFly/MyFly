@@ -43,7 +43,7 @@ html {
     color:black;
 }
 body {
-    margin:0;
+    margin:10;
 }
 article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary {
 	display:block

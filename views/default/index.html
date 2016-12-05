@@ -32,45 +32,21 @@
         {{=flight['flight_time']}}
       </div>
 
-<!--
+
 <table>
   <tr>
     <th scope="col">Source</th>
     <th scope="col">Destination</th>
+    <th scope="col">Travel Date</th>
     <th scope="col">Price</th>
-    <th scope="col">Price</th>
-    <th scope="col">Airplane</th>
+    <th scope="col">Airline</th>
     <th scope="col">Flight Duration</th>
     <th>Source</th>
   </tr>
-  <tr>
 
- <!--    <table style="width: 100%">
-     <thead>
-          <tr>
-               <th>Source</th>
-               <th>Destination</th>
-               <th>Travel Date</th>
-               <th>Price</th>
-              <th>Airline</th>
-              <th>Flight Duration</th>
-           </tr>
-     </thead>
-     <tbody id="tbody">
-     </tbody>
-</table>
+<div id="content" class="col-sm-10 col-sm-offset-1"><div class="text-center">
+    <table id="table" class="" role="grid">
 
-$.each(data, function (index, item) {
-     var eachrow = "<tr>"
-                 + "<td>" + item[1] + "</td>"
-                 + "<td>" + item[2] + "</td>"
-                 + "<td>" + item[3] + "</td>"
-                 + "<td>" + item[4] + "</td>"
-                 + "<td>" + item[5] + "</td>"
-                 + "<td>" + item[6] + "</td>"
-                 + "</tr>";
-     $('#tbody').append(eachrow);
-});-->
       {{pass}}
 
 {{else:}}
