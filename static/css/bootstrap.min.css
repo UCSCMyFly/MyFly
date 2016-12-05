@@ -1068,9 +1068,11 @@ body {
 }
 
 .column {
-    width: 200px;
+    width: 400px;
 }
-
+.column3{
+    width:300px
+}
 input,button,select,textarea {
 	font-family:inherit;
 	font-size:inherit;
@@ -1657,7 +1659,7 @@ pre code {
 		width:83.33333333%
 	}
 	.col-sm-9 {
-		width:75%
+		width:40%
 	}
 	.col-sm-8 {
 		width:66.66666667%
