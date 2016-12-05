@@ -35,7 +35,7 @@
     {{block head}}{{end}}
     {{
     # using sidebars need to know what sidebar you want to use
-    mc0 = 'col-md-12'
+    mc0 = 'col-lg-12'
     mc1 = 'col-md-9'
     mc2 = 'col-md-6'
     left_sidebar_enabled = globals().get('left_sidebar_enabled', False)
@@ -77,7 +77,7 @@
     <!-- Begin page content -->
     
       </section>{{if left_sidebar_enabled:}}
-        <div class="col-md-3 left-sidebar">
+        <div class="col-lg-3 left-sidebar">
             {{block left_sidebar}}
             <h3>Left Sidebar</h3>
             <p></p>
@@ -92,7 +92,7 @@
       </div>
 
       {{if right_sidebar_enabled:}}
-        <div class="col-md-3">
+        <div class="col-lg-3">
             {{block right_sidebar}}
             <h3>Right Sidebar</h3>
             <p></p>

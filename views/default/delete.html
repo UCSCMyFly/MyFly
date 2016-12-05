@@ -1,24 +1,17 @@
 {{include 'layout.html'}}
-
 <div>
-	<span>
-		srcs
+		<h4>List of Sources:</h4>
 		{{for src in srcs:}}
 			{{=src}} 
 		{{pass}}
-	</span>
-</div>
-<div>
-	<span>
-		dsts
+		<h4>List of Destinations:</h4>
 		{{for dst in dsts:}}
 			{{=dst}} 
 		{{pass}}
-	</span>
 </div>
-<h4>delete source</h4>
+<h4>Delete source</h4>
 {{=form1}}
-<h4>delete destination</h4>
+<h4>Delete destination</h4>
 {{=form2}}
 
 <a href="{{=URL('default', 'manage')}}">manage</a>

@@ -147,11 +147,14 @@ def make_flight_sets(unode):
 
 @auth.requires_login()
 def manage():
-    form1 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
+    form1 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s'), _id='name'),
                  INPUT(_type='submit'))
-    form2 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s')),
-                 INPUT(_name='price', requires=IS_FLOAT_IN_RANGE(1, 10000000, dot=".", error_message='price cant be negative')),
+    form2 = FORM(INPUT(_name='name', requires=IS_IN_DB(db, 'airports.airport_name', '%(airport_name)s'), _id='name'),
+                 INPUT(_name='price', requires=IS_FLOAT_IN_RANGE(1, 10000000, dot=".", error_message='price cant be negative'), _id='max_price'),
                  INPUT(_type='submit'))
+    form1.element(_id='name')['_placeholder']='Origin Airport Code'
+    form2.element(_id='name')['_placeholder']='Dest Airport Code'
+    form2.element(_id='max_price')['_placeholder']='500.00'
     unode = db.user_nodes(user_email = auth.user.email)
     if unode is None:
         node_id = db.user_nodes.insert(user_email=auth.user.email)
@@ -184,10 +187,12 @@ def delete():
         sources = unode.sources
         destinations = unode.destinations
 
-    form1 = FORM(INPUT(_name='name'),
+    form1 = FORM(INPUT(_name='name', _id='name'),
                  INPUT(_type='submit'))
-    form2 = FORM(INPUT(_name='name'),
+    form2 = FORM(INPUT(_name='name', _id='name'),
                  INPUT(_type='submit'))
+    form1.element(_id='name')['_placeholder']='Origin Airport Code'
+    form2.element(_id='name')['_placeholder']='Dest Airport Code'
     if form1.process(formname='form_one').accepted:
         sources = unode.sources
         if request.vars.name in sources:
